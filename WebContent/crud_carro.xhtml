@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaCarros" var="carro" value="#{carroBean.carros}" 
+			 		rows="10"
+		            paginator="true"
+		            rowsPerPageTemplate="5,10,15" 
+		            emptyMessage="Nenhum carro cadastrada no banco de dados" >
+		            
+			    <p:column headerText="Id">
+			        <h:outputText value="#{carro.id}" />
+			    </p:column>
+			 
+			    <p:column headerText="Placa">
+			        <h:outputText value="#{carro.placa}" />
+			    </p:column>
+			 
+			    <p:column headerText="Nome">
+			        <h:outputText value="#{carro.nome}" />
+			    </p:column>
+			    
+			    <p:column headerText="*">
+		            
+		            
+		            <p:commandButton value="Editar"	action="#{carroBean.Editar(carro)}"
+			    		onclick="PF('dlgEditarCarro').show();"
+			    		update=":formEditarCarro" />
+		            	
+		            <p:commandButton icon="ui-icon-trash" actionListener="#{carroBean.PrepararExcluir}"
+		            	value="Excluir" 
+		            	onclick="PF('dlgExcluirCarro').show();"
+			    		update="dlgEx" />
+			    		
+		        </p:column>
+		        
+		        <f:facet name="footer">
+			    	<p:commandButton value="Novo Carro" actionListener="#{carroBean.Limpar()}" 
+			    	oncomplete="PF('dlgCadastrarCarro').show();"
+			    	update=":fCadastrar:pgCadastrar" />
+			    </f:facet>
+		        
+			</p:dataTable>
+		</h:form>
+		
+		<br />
+		
+		<h:panelGroup id="painelCadastro" rendered="#{!carroBean.editando}" >
+			<h3>Add Carro</h3>
+			<h:form>
+				<p>Id:<p:inputText value="#{carroBean.carro.id}" /></p>
+				<p>Placa:<p:inputText value="#{carroBean.carro.placa}" /></p>
+				<p>Nome:<p:inputText value="#{carroBean.carro.nome}" /></p>
+				<p>
+					<p:commandButton value="Add" action="#{carroBean.Adicionar}" 
+						update=":formTabela" />
+						
+					<p:commandButton value="Limpar" action="#{carroBean.Limpar}" />
+				</p>
+			</h:form>
+		</h:panelGroup>
+		
+		<p:dialog header="Cadastrar Carro" widgetVar="dlgCadastrarCarro" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fCadastrar" >
+		        
+		        <p:outputPanel id="painelEditarCarro" style="text-align:center;">
+		            
+		            <p:panelGrid id="pgCadastrar" columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="id" />
+		                <p:inputText value="#{carroBean.carro.id}" />
+		 
+		                <h:outputText value="nome" />
+		                <p:inputText value="#{carroBean.carro.placa}" />
+		 
+		                <h:outputText value="Tel" />
+		                <p:inputText value="#{carroBean.carro.nome}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Cadastrar" oncomplete="PF('dlgCadastrarCarro').hide();" 
+							actionListener="#{carroBean.Adicionar()}" 
+							update=":formTabela:tabelaCarros :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgCadastrarCarro').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+		
+		<p:dialog header="Editar Carro" widgetVar="dlgEditarCarro" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="formEditarCarro" >
+		        
+		        <p:outputPanel id="painelEditarCarro" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Id:" />
+		                <h:outputText value="#{carroBean.carro.id}" />
+		 
+		                <h:outputText value="Nome" />
+		                <p:inputText value="#{carroBean.carro.placa}" />
+		 
+		               	<h:outputText value="Telefone" />
+		                <p:inputText value="#{carroBean.carro.nome}" />
+		                
+		          
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Salvar Edição" oncomplete="PF('dlgEditarCarro').hide();" 
+							actionListener="#{carroBean.SalvarEdicao()}" 
+							update=":formTabela:tabelaCarros :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgEditarCarro').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+    	
+    	<p:dialog id="dlgEx" header="Excluir Carro" widgetVar="dlgExcluirCarro" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="formExcluirCarro" >
+		        
+		        <p:outputPanel id="painelEditarCarro" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Id:" />
+		                <h:outputText value="#{carroBean.carro.id}" />
+		 
+		                <h:outputText value="placa" />
+		                <h:outputText value="#{carroBean.carro.placa}" />
+		 
+		                <h:outputText value="nome" />
+		                <h:outputText value="#{carroBean.carro.nome}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Excluir" oncomplete="PF('dlgExcluirCarro').hide();" 
+							actionListener="#{carroBean.Excluir()}" 
+							update=":formTabela:tabelaCarros :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgExcluirCarro').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+	
+		
+	</ui:define>
+	
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>

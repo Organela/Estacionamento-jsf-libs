@@ -8,10 +8,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import model.Endereco;
+import model.Vaga;
 
-@FacesConverter("enderecoConverter")
-public class EnderecoConverter implements Converter, Serializable {
+@FacesConverter("vagaConverter")
+public class VagaConverter implements Converter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class EnderecoConverter implements Converter, Serializable {
 
         if (value != null && !"".equals(value)) {
 
-        	Endereco entity = (Endereco) value;
+        	Vaga entity = (Vaga) value;
 
             // adiciona item como atributo do componente
             this.addAttribute(component, entity);
@@ -43,7 +43,7 @@ public class EnderecoConverter implements Converter, Serializable {
         return (String) value;
     }
 
-    protected void addAttribute(UIComponent component, Endereco o) {
+    protected void addAttribute(UIComponent component, Vaga o) {
         String key = Integer.toString(o.getId()); // codigo do Objeto para Converter como chave neste caso
         this.getAttributesFrom(component).put(key, o);
     }

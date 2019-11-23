@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaVagas" var="vaga" value="#{vagaBean.vagas}" 
+			 		rows="10"
+		            paginator="true"
+		            rowsPerPageTemplate="5,10,15" 
+		            emptyMessage="Nenhum vaga cadastrada no banco de dados" >
+		            
+			    <p:column headerText="Id">
+			        <h:outputText value="#{vaga.id}" />
+			    </p:column>
+			 
+			    <p:column headerText="Status">
+			        <h:outputText value="#{vaga.status}" />
+			    </p:column>
+			 
+			   
+			    <p:column headerText="*">
+		            
+		            
+		            <p:commandButton value="Editar"	action="#{vagaBean.Editar(vaga)}"
+			    		onclick="PF('dlgEditarVaga').show();"
+			    		update=":formEditarVaga" />
+		            	
+		            <p:commandButton icon="ui-icon-trash" actionListener="#{vagaBean.PrepararExcluir}"
+		            	value="Excluir" 
+		            	onclick="PF('dlgExcluirVaga').show();"
+			    		update="dlgEx" />
+			    		
+		        </p:column>
+		        
+		        <f:facet name="footer">
+			    	<p:commandButton value="Novo Vaga" actionListener="#{vagaBean.Limpar()}" 
+			    	oncomplete="PF('dlgCadastrarVaga').show();"
+			    	update=":fCadastrar:pgCadastrar" />
+			    </f:facet>
+		        
+			</p:dataTable>
+		</h:form>
+		
+		<br />
+		
+		<h:panelGroup id="painelCadastro" rendered="#{!vagaBean.editando}" >
+			<h3>Add Vaga</h3>
+			<h:form>
+				<p>Id:<p:inputText value="#{vagaBean.vaga.id}" /></p>
+				<p>Status:<p:inputText value="#{vagaBean.vaga.status}" /></p>
+				
+				<p>
+					<p:commandButton value="Add" action="#{vagaBean.Adicionar}" 
+						update=":formTabela" />
+						
+					<p:commandButton value="Limpar" action="#{vagaBean.Limpar}" />
+				</p>
+			</h:form>
+		</h:panelGroup>
+		
+		<p:dialog header="Cadastrar Vaga" widgetVar="dlgCadastrarVaga" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fCadastrar" >
+		        
+		        <p:outputPanel id="painelEditarVaga" style="text-align:center;">
+		            
+		            <p:panelGrid id="pgCadastrar" columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="id" />
+		                <p:inputText value="#{vagaBean.vaga.id}" />
+		 
+		                <h:outputText value="status" />
+		                <p:inputText value="#{vagaBean.vaga.status}" />
+		 
+		               
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Cadastrar" oncomplete="PF('dlgCadastrarVaga').hide();" 
+							actionListener="#{vagaBean.Adicionar()}" 
+							update=":formTabela:tabelaVagas :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgCadastrarVaga').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+		
+		<p:dialog header="Editar Vaga" widgetVar="dlgEditarVaga" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="formEditarVaga" >
+		        
+		        <p:outputPanel id="painelEditarVaga" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Id:" />
+		                <h:outputText value="#{vagaBean.vaga.id}" />
+		 
+		                <h:outputText value="Status" />
+		                <p:inputText value="#{vagaBean.vaga.status}" />
+		 
+		               
+		                
+		          
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Salvar Edição" oncomplete="PF('dlgEditarVaga').hide();" 
+							actionListener="#{vagaBean.SalvarEdicao()}" 
+							update=":formTabela:tabelaVagas :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgEditarVaga').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+    	
+    	<p:dialog id="dlgEx" header="Excluir Vaga" widgetVar="dlgExcluirVaga" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="formExcluirVaga" >
+		        
+		        <p:outputPanel id="painelEditarVaga" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Id:" />
+		                <h:outputText value="#{vagaBean.vaga.id}" />
+		 
+		                <h:outputText value="Status" />
+		                <h:outputText value="#{vagaBean.vaga.status}" />
+		 
+		                
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Excluir" oncomplete="PF('dlgExcluirVaga').hide();" 
+							actionListener="#{vagaBean.Excluir()}" 
+							update=":formTabela:tabelaVagas :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgExcluirVaga').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+	
+		
+	</ui:define>
+	
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>

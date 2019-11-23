@@ -9,20 +9,22 @@
 	template="/templates/template.xhtml"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-	<ui:define name="cabecalho">
-		<ui:include src="/templates/cabecalho.xhtml" />
-	</ui:define>
 	
-	<ui:define name="menu">
-	    <ui:include src="/templates/menu.xhtml" />
-	</ui:define>
 	
-	<ui:define name="conteudo">
-		<h1 id="tituloPrincipal">Página Principal do Sistema WEB</h1>
-	</ui:define>
+		<ui:define name="cabecalho">
+			<ui:include src="/templates/cabecalho.xhtml" />
+		</ui:define>
 	
-	<ui:define name="rodape">
-	   <ui:include src="/templates/rodape.xhtml" />
-	</ui:define>
-
+		<ui:define name="menu">
+	    	<ui:include src="/templates/menu.xhtml" />
+		</ui:define>
+	
+		<ui:define name="conteudo">
+			<h1 id="tituloPrincipal">Página Principal do Sistema WEB</h1>
+		</ui:define>
+	
+		<ui:define name="rodape">
+	   		<ui:include src="/templates/rodape.xhtml" />
+		</ui:define>
+	
 </ui:composition>
