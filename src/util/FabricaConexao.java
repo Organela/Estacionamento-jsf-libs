@@ -16,7 +16,7 @@ public class FabricaConexao {
 			this.conexao = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/aulaweb",
 					"root",
-					"root"
+					""
 					);
 			
 		} catch (Exception e) {
